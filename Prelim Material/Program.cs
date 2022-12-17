@@ -44,53 +44,53 @@ namespace Dastan
 
         private void DisplayBoard()
         {
-            Console.Write(Environment.NewLine + "   ");
-            for (int Column = 1; Column <= NoOfColumns; Column++)
+            Console.Write(Environment.NewLine + "   ");                                                 // skips a line and inrements by 3 spaces
+            for (int Column = 1; Column <= NoOfColumns; Column++)                                       // loops through the number of columns declared when Dastan was initialised 
             {
-                Console.Write(Column.ToString() + "  ");
+                Console.Write(Column.ToString() + "  ");                                                // writes the column number with 2 spaces seperating it from the next one
             }
-            Console.Write(Environment.NewLine + "  ");
-            for (int Count = 1; Count <= NoOfColumns; Count++)
+            Console.Write(Environment.NewLine + "  ");                                                  // goes onto the next line and increments by 2 spaces
+            for (int Count = 1; Count <= NoOfColumns; Count++)                                          // loops through the number of columns declared when Dastan was initialised 
             {
-                Console.Write("---");
+                Console.Write("---");                                                                   // writing the top line of the top cells
             }
-            Console.WriteLine("-");
-            for (int Row = 1; Row <= NoOfRows; Row++)
+            Console.WriteLine("-");                                                                     // adding an extra dash at the end so that it reaches the full length of the board and starting a new line (Console.WriteLine over Console.Write)
+            for (int Row = 1; Row <= NoOfRows; Row++)                                                   // loops through the number of rows declared when Dastan was initialised 
             {
-                Console.Write(Row.ToString() + " ");
-                for (int Column = 1; Column <= NoOfColumns; Column++)
+                Console.Write(Row.ToString() + " ");                                                    // writes the row number followed by a space to seperate it from the rest of the board
+                for (int Column = 1; Column <= NoOfColumns; Column++)                                   // loops through the number of columns declared when Dastan was initialised
                 {
-                    int Index = GetIndexOfSquare(Row * 10 + Column);
-                    Console.Write("|" + Board[Index].GetSymbol());
-                    Piece PieceInSquare = Board[Index].GetPieceInSquare();
-                    if (PieceInSquare == null)
+                    int Index = GetIndexOfSquare(Row * 10 + Column);                                    // getting the index for the next square to be added to the board using GetIndexOfSquare function
+                    Console.Write("|" + Board[Index].GetSymbol());                                      // writing | (represents the start of the cell) followed by the symbol in that boards square (either blank or a kotla)
+                    Piece PieceInSquare = Board[Index].GetPieceInSquare();                              // declaring a tempoary piece to represent theh piece in the current square
+                    if (PieceInSquare == null)                                          
                     {
-                        Console.Write(" ");
+                        Console.Write(" ");                                                             // if there is no piece in the square then a blank space is written
                     }
                     else
                     {
-                        Console.Write(PieceInSquare.GetSymbol());
+                        Console.Write(PieceInSquare.GetSymbol());                                       // if there is a piece in the square then the piece's symbol is written
                     }
                 }
-                Console.WriteLine("|");
+                Console.WriteLine("|");                                                                 // adding a final | at the end to complete the line so it reaches the full length of the board and starts a new line (Console.WriteLine over Console.Write)
             }
-            Console.Write("  -");
-            for (int Column = 1; Column <= NoOfColumns; Column++)
+            Console.Write("  -");                                                                       // start of the bottom of the square (increments by 2 before starting the bottom)               
+            for (int Column = 1; Column <= NoOfColumns; Column++)                                       // loops through the number of columns declared when Dastan was initialised
             {
-                Console.Write("---");
+                Console.Write("---");                                                                   // writing the bottom lines of each square
             }
-            Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine();                                                                        // skipping a line
+            Console.WriteLine();                                                                        // skipping a line
         }
 
         private void DisplayState()
         {
-            DisplayBoard();
-            Console.WriteLine("Move option offer: " + MoveOptionOffer[MoveOptionOfferPosition]);
-            Console.WriteLine();
-            Console.WriteLine(CurrentPlayer.GetPlayerStateAsString());
-            Console.WriteLine("Turn: " + CurrentPlayer.GetName());
-            Console.WriteLine();
+            DisplayBoard();                                                                             // calls displayBoard
+            Console.WriteLine("Move option offer: " + MoveOptionOffer[MoveOptionOfferPosition]);        // displaying the first player's move offer
+            Console.WriteLine();                                                                        // skipping a line
+            Console.WriteLine(CurrentPlayer.GetPlayerStateAsString());                                  // displays the players play string (players name, their score and their move option queue)
+            Console.WriteLine("Turn: " + CurrentPlayer.GetName());                                      // states the players who turn it is 
+            Console.WriteLine();                                                                        // skips a line 
         }
 
         private int GetIndexOfSquare(int SquareReference)
@@ -230,10 +230,10 @@ namespace Dastan
 
         public void PlayGame()
         {
-            bool GameOver = false;
-            while (!GameOver)
+            bool GameOver = false;                                                                      // setting gameOver to false 
+            while (!GameOver)                                                                           // looping while gameOver is set to false, loop is exited once game ends
             {
-                DisplayState();
+                DisplayState();                                                                         // displays the game state information for the next players turn 
                 bool SquareIsValid = false;
                 int Choice;
                 do
@@ -738,7 +738,7 @@ namespace Dastan
 
         public string GetPlayerStateAsString()
         {
-            return Name + Environment.NewLine + "Score: " + Score.ToString() + Environment.NewLine + "Move option queue: " + Queue.GetQueueAsString() + Environment.NewLine;
+            return Name + Environment.NewLine + "Score: " + Score.ToString() + Environment.NewLine + "Move option queue: " + Queue.GetQueueAsString() + Environment.NewLine;            // returns the players play string (players name, their score and their move option queue)
         }
 
         public void AddToMoveOptionQueue(MoveOption NewMoveOption)
@@ -763,7 +763,7 @@ namespace Dastan
 
         public string GetName()
         {
-            return Name;
+            return Name;                                                                                // returns the players name (player one or player two)
         }
 
         public int GetDirection()
