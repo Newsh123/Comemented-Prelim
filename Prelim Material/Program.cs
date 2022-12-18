@@ -102,130 +102,130 @@ namespace Dastan
 
         private bool CheckSquareInBounds(int SquareReference)
         {
-            int Row = SquareReference / 10;
-            int Col = SquareReference % 10;
+            int Row = SquareReference / 10;                                                             // sets the row number as the tens digit from the square reference
+            int Col = SquareReference % 10;                                                             // sets the column number as the units digit from the square reference
             if (Row < 1 || Row > NoOfRows)
             {
-                return false;
+                return false;                                                                           // if the row number is below 1 or is above the declared number of rows the function returns false
             }
             else if (Col < 1 || Col > NoOfColumns)
             {
-                return false;
+                return false;                                                                           // if the column number is below 1 or is above the declared number of columns the function returns false
             }
             else
             {
-                return true;
+                return true;                                                                            // if neither of the above is true then the function returns true
             }
         }
 
         private bool CheckSquareIsValid(int SquareReference, bool StartSquare)
         {
-            if (!CheckSquareInBounds(SquareReference))
+            if (!CheckSquareInBounds(SquareReference))                                                  
             {
-                return false;
+                return false;                                                                           // if the square is not within the range of the list then the function returns false
             }
-            Piece PieceInSquare = Board[GetIndexOfSquare(SquareReference)].GetPieceInSquare();
+            Piece PieceInSquare = Board[GetIndexOfSquare(SquareReference)].GetPieceInSquare();          // declaring a tempoary piece for the piece in the given square reference
             if (PieceInSquare == null)
             {
                 if (StartSquare)
                 {
-                    return false;
+                    return false;                                                                       // if there is no piece in the square and it is checking that it is a valid start square then the function returns false
                 }
                 else
                 {
-                    return true;
+                    return true;                                                                        // if there is no piece in the square but it is not checking that it is a valid start square then the function returns true
                 }
             }
             else if (CurrentPlayer.SameAs(PieceInSquare.GetBelongsTo()))
             {
                 if (StartSquare)
                 {
-                    return true;
+                    return true;                                                                        // if the piece in the square belongs to the player and it is checking that it is a valid start square then the function returns true 
                 }
                 else
                 {
-                    return false;
+                    return false;                                                                       // if the piece in the square belongs to the player and it is not checking that it is a valid start square then the function returns false
                 }
             }
             else
             {
                 if (StartSquare)
                 {
-                    return false;
+                    return false;                                                                       // if the piece in the square does not belong to the player and it is checking that it is a valid start sqaure then the function returns false
                 }
                 else
                 {
-                    return true;
+                    return true;                                                                        // if the piece in the square does not belong to the palyer and it is not checking that it is a valid start square then the function returns true
                 }
             }
         }
 
         private bool CheckIfGameOver()
         {
-            bool Player1HasMirza = false;
-            bool Player2HasMirza = false;
-            foreach (var S in Board)
+            bool Player1HasMirza = false;                                                               // creating flag for player one having a mirza to false by default
+            bool Player2HasMirza = false;                                                               // creating flag for player two having a mirza to false by default
+            foreach (var S in Board)                                                                    // looping through each square in the board
             {
-                Piece PieceInSquare = S.GetPieceInSquare();
+                Piece PieceInSquare = S.GetPieceInSquare();                                             // tempoary variable for the piece in the current square
                 if (PieceInSquare != null)
                 {
                     if (S.ContainsKotla() && PieceInSquare.GetTypeOfPiece() == "mirza" && !PieceInSquare.GetBelongsTo().SameAs(S.GetBelongsTo()))
                     {
-                        return true;
+                        return true;                                                                    // retuns true if the square contains a kotla, contains a mirza and the mirza does not belong to the same player as the kotla
                     }
                     else if (PieceInSquare.GetTypeOfPiece() == "mirza" && PieceInSquare.GetBelongsTo().SameAs(Players[0]))
                     {
-                        Player1HasMirza = true;
+                        Player1HasMirza = true;                                                         // sets the player one having mirza flag to true
                     }
                     else if (PieceInSquare.GetTypeOfPiece() == "mirza" && PieceInSquare.GetBelongsTo().SameAs(Players[1]))
                     {
-                        Player2HasMirza = true;
+                        Player2HasMirza = true;                                                         // sets the player two having mirza flag to true
                     }
                 }
             }
-            return !(Player1HasMirza && Player2HasMirza);
+            return !(Player1HasMirza && Player2HasMirza);                                               // returns false if both players have mirza, true if one player does have mirza
         }
 
         private int GetSquareReference(string Description)
         {
-            int SelectedSquare;
-            Console.Write("Enter the square " + Description + " (row number followed by column number): ");
-            SelectedSquare = Convert.ToInt32(Console.ReadLine());
-            return SelectedSquare;
+            int SelectedSquare;                                                                         // declaring the selected square variable as an integer
+            Console.Write("Enter the square " + Description + " (row number followed by column number): ");     // ouputting to the suer the type of square to enter (such as the square they want to move the piece to)
+            SelectedSquare = Convert.ToInt32(Console.ReadLine());                                       // reading the reference for the square inputted by the user (no input checking so could crash the program)
+            return SelectedSquare;                                                                      // returns the selected square
         }
 
         private void UseMoveOptionOffer()
         {
-            int ReplaceChoice;
-            Console.Write("Choose the move option from your queue to replace (1 to 5): ");
-            ReplaceChoice = Convert.ToInt32(Console.ReadLine());
-            CurrentPlayer.UpdateMoveOptionQueueWithOffer(ReplaceChoice - 1, CreateMoveOption(MoveOptionOffer[MoveOptionOfferPosition], CurrentPlayer.GetDirection()));
-            CurrentPlayer.ChangeScore(-(10 - (ReplaceChoice * 2)));
-            MoveOptionOfferPosition = RGen.Next(0, 5);
+            int ReplaceChoice;                                                                          // declaring the ReplaceChoice as an integer
+            Console.Write("Choose the move option from your queue to replace (1 to 5): ");              // giving the user the options for what move they want to replace
+            ReplaceChoice = Convert.ToInt32(Console.ReadLine());                                        // reading in the users choice and converting result to an integer (no error checking so could crash program)
+            CurrentPlayer.UpdateMoveOptionQueueWithOffer(ReplaceChoice - 1, CreateMoveOption(MoveOptionOffer[MoveOptionOfferPosition], CurrentPlayer.GetDirection()));      // updates the players queue to swap the move option offer into the queue
+            CurrentPlayer.ChangeScore(-(10 - (ReplaceChoice * 2)));                                     // decreases the players score according to where the replaced move option was (e.g. if move option was at position 3 the score would decrease by 4)
+            MoveOptionOfferPosition = RGen.Next(0, 5);                                                  // chooses a random move option between 0 and 4 inclusive to be the next offer
         }
 
         private int GetPointsForOccupancyByPlayer(Player CurrentPlayer)
         {
-            int ScoreAdjustment = 0;
-            foreach (var S in Board)
+            int ScoreAdjustment = 0;                                                                    // setting the score adjustment to 0 by default
+            foreach (var S in Board)                                                                    // looping through each square in the board
             {
-                ScoreAdjustment += (S.GetPointsForOccupancy(CurrentPlayer));
+                ScoreAdjustment += (S.GetPointsForOccupancy(CurrentPlayer));                            // adding the points gained from the current playing occupying each square (+5 if the square is his kotla and contains his own piece, +1 if the square is the other players kotla and contains the current players piece, +0 if neither of the other 2 conditions are met) 
             }
-            return ScoreAdjustment;
+            return ScoreAdjustment;                                                                     // returning the score adjustment required for the player
         }
 
         private void UpdatePlayerScore(int PointsForPieceCapture)
         {
-            CurrentPlayer.ChangeScore(GetPointsForOccupancyByPlayer(CurrentPlayer) + PointsForPieceCapture);
+            CurrentPlayer.ChangeScore(GetPointsForOccupancyByPlayer(CurrentPlayer) + PointsForPieceCapture);        // add the points for the occupying squares and taking a piece to the current players score
         }
 
         private int CalculatePieceCapturePoints(int FinishSquareReference)
         {
             if (Board[GetIndexOfSquare(FinishSquareReference)].GetPieceInSquare() != null)
             {
-                return Board[GetIndexOfSquare(FinishSquareReference)].GetPieceInSquare().GetPointsIfCaptured();
+                return Board[GetIndexOfSquare(FinishSquareReference)].GetPieceInSquare().GetPointsIfCaptured();     // if there is a piece in the square then return the points gained from capturing the square
             }
-            return 0;
+            return 0;                                                                                   // if there is not a piece in the square then return 0 points for capturing it
         }
 
         public void PlayGame()
@@ -234,74 +234,74 @@ namespace Dastan
             while (!GameOver)                                                                           // looping while gameOver is set to false, loop is exited once game ends
             {
                 DisplayState();                                                                         // displays the game state information for the next players turn 
-                bool SquareIsValid = false;
-                int Choice;
-                do
+                bool SquareIsValid = false;                                                             // setting that the square is not valid
+                int Choice;                                                                             // declaring the integer Choice 
+                do                                                                                      // looping while the user does not choose a number between 1 and 3 (loops at least once)
                 {
-                    Console.Write("Choose move option to use from queue (1 to 3) or 9 to take the offer: ");
-                    Choice = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Choose move option to use from queue (1 to 3) or 9 to take the offer: ");    // displaying instructions to the user
+                    Choice = Convert.ToInt32(Console.ReadLine());                                       // converting the users choice into an integer (no error checking for if it is already an integer so could cause a crash) 
                     if (Choice == 9)
                     {
-                        UseMoveOptionOffer();
-                        DisplayState();
+                        UseMoveOptionOffer();                                                           // if choice is set to 9 then the move option offer is used
+                        DisplayState();                                                                 // redisplays the current game state with the updated information from the move option offer being taken
                     }
                 }
                 while (Choice < 1 || Choice > 3);
-                int StartSquareReference = 0;
-                while (!SquareIsValid)
+                int StartSquareReference = 0;                                                           // declaring the variable for the square of origin for the piece the user wants to move
+                while (!SquareIsValid)                                                                  // looping while the square is not verified
                 {
-                    StartSquareReference = GetSquareReference("containing the piece to move");
-                    SquareIsValid = CheckSquareIsValid(StartSquareReference, true);
+                    StartSquareReference = GetSquareReference("containing the piece to move");          // gets the square reference for the piece that the user wants to move
+                    SquareIsValid = CheckSquareIsValid(StartSquareReference, true);                     // checks if the square is a valid place to go from
                 }
-                int FinishSquareReference = 0;
-                SquareIsValid = false;
-                while (!SquareIsValid)
+                int FinishSquareReference = 0;                                                          // declaring the variable for the sqaure the player wants to move to 
+                SquareIsValid = false;                                                                  // setting that the square is invalid
+                while (!SquareIsValid)                                                                  // looping while the square is not valid
                 {
-                    FinishSquareReference = GetSquareReference("to move to");
-                    SquareIsValid = CheckSquareIsValid(FinishSquareReference, false);
+                    FinishSquareReference = GetSquareReference("to move to");                           // gets the square reference for the square that the user wants to move to
+                    SquareIsValid = CheckSquareIsValid(FinishSquareReference, false);                   // checks if the square is a valid place to move to
                 }
-                bool MoveLegal = CurrentPlayer.CheckPlayerMove(Choice, StartSquareReference, FinishSquareReference);
+                bool MoveLegal = CurrentPlayer.CheckPlayerMove(Choice, StartSquareReference, FinishSquareReference);    // move is legal if there is a valid move in the move option that takes the piece from the start positon to the finish position
                 if (MoveLegal)
                 {
-                    int PointsForPieceCapture = CalculatePieceCapturePoints(FinishSquareReference);
-                    CurrentPlayer.ChangeScore(-(Choice + (2 * (Choice - 1))));
-                    CurrentPlayer.UpdateQueueAfterMove(Choice);
-                    UpdateBoard(StartSquareReference, FinishSquareReference);
-                    UpdatePlayerScore(PointsForPieceCapture);
+                    int PointsForPieceCapture = CalculatePieceCapturePoints(FinishSquareReference);     // if the move is legal the points for capturing a piece at the finish square is retrieved
+                    CurrentPlayer.ChangeScore(-(Choice + (2 * (Choice - 1))));                          // changes by the score by the amount based on the choice chosen (choice 3 results in -7 score
+                    CurrentPlayer.UpdateQueueAfterMove(Choice);                                         // updating the player's move option queue to move the selected moe option to the back of it
+                    UpdateBoard(StartSquareReference, FinishSquareReference);                           // moves the piece to the new place on the board
+                    UpdatePlayerScore(PointsForPieceCapture);                                           // adds the points gained that round to the players score (points for occupying squares + points for capture)
                     Console.WriteLine("New score: " + CurrentPlayer.GetScore() + Environment.NewLine);
                 }
                 if (CurrentPlayer.SameAs(Players[0]))
                 {
-                    CurrentPlayer = Players[1];
+                    CurrentPlayer = Players[1];                                                         // if the current player is "player one" then the current player is updated to "plaer two"                             
                 }
                 else
                 {
-                    CurrentPlayer = Players[0];
+                    CurrentPlayer = Players[0];                                                         // if the current player is not "player one" then the current player is set to "player one"
                 }
-                GameOver = CheckIfGameOver();
+                GameOver = CheckIfGameOver();                                                           // check for if the game is over yet, loop ends if it is
             }
-            DisplayState();
-            DisplayFinalResult();
+            DisplayState();                                                                             // displays the current game state information (I HATE THIS IT SHOULDN'T DO THIS! IT TELLS THE NEXT PLAYER TO GO BEFORE ENDING!?!?!??!)
+            DisplayFinalResult();                                                                       // 
         }
 
         private void UpdateBoard(int StartSquareReference, int FinishSquareReference)
         {
-            Board[GetIndexOfSquare(FinishSquareReference)].SetPiece(Board[GetIndexOfSquare(StartSquareReference)].RemovePiece());
+            Board[GetIndexOfSquare(FinishSquareReference)].SetPiece(Board[GetIndexOfSquare(StartSquareReference)].RemovePiece());       // moving the piece from the start square to the finish square
         }
 
         private void DisplayFinalResult()
         {
             if (Players[0].GetScore() == Players[1].GetScore())
             {
-                Console.WriteLine("Draw!");
+                Console.WriteLine("Draw!");                                                             // if the players both have the same score then it ends in a draw
             }
             else if (Players[0].GetScore() > Players[1].GetScore())
             {
-                Console.WriteLine(Players[0].GetName() + " is the winner!");
+                Console.WriteLine(Players[0].GetName() + " is the winner!");                            // if player one has a higher score then player one wins
             }
             else
             {
-                Console.WriteLine(Players[1].GetName() + " is the winner!");
+                Console.WriteLine(Players[1].GetName() + " is the winner!");                            // if player two has a higher score then player two wins
             }
         }
 
@@ -465,15 +465,15 @@ namespace Dastan
         private void CreateMoveOptions()
         {
             Players[0].AddToMoveOptionQueue(CreateMoveOption("ryott", 1));                              // adds ryott move where forwards direction is downwards
-            Players[0].AddToMoveOptionQueue(CreateMoveOption("chowkidar", 1));                          // adds ryott move where forwards direction is downwards    
-            Players[0].AddToMoveOptionQueue(CreateMoveOption("cuirassier", 1));                         // adds ryott move where forwards direction is downwards
-            Players[0].AddToMoveOptionQueue(CreateMoveOption("faujdar", 1));                            // adds ryott move where forwards direction is downwards
-            Players[0].AddToMoveOptionQueue(CreateMoveOption("jazair", 1));                             // adds ryott move where forwards direction is downwards
-            Players[1].AddToMoveOptionQueue(CreateMoveOption("ryott", -1));                             // adds ryott move where forwards direction is downwards
-            Players[1].AddToMoveOptionQueue(CreateMoveOption("chowkidar", -1));                         // adds ryott move where forwards direction is downwards
-            Players[1].AddToMoveOptionQueue(CreateMoveOption("jazair", -1));                            // adds ryott move where forwards direction is downwards
-            Players[1].AddToMoveOptionQueue(CreateMoveOption("faujdar", -1));                           // adds ryott move where forwards direction is downwards    
-            Players[1].AddToMoveOptionQueue(CreateMoveOption("cuirassier", -1));                        // adds ryott move where forwards direction is downwards
+            Players[0].AddToMoveOptionQueue(CreateMoveOption("chowkidar", 1));                          // adds chowkidar move where forwards direction is downwards    
+            Players[0].AddToMoveOptionQueue(CreateMoveOption("cuirassier", 1));                         // adds curiasser move where forwards direction is downwards
+            Players[0].AddToMoveOptionQueue(CreateMoveOption("faujdar", 1));                            // adds faujdar move where forwards direction is downwards
+            Players[0].AddToMoveOptionQueue(CreateMoveOption("jazair", 1));                             // adds jazair move where forwards direction is downwards
+            Players[1].AddToMoveOptionQueue(CreateMoveOption("ryott", -1));                             // adds ryott move where backwards direction is downwards
+            Players[1].AddToMoveOptionQueue(CreateMoveOption("chowkidar", -1));                         // adds chowdikar move where backwards direction is downwards
+            Players[1].AddToMoveOptionQueue(CreateMoveOption("jazair", -1));                            // adds jazair move where backwards direction is downwards
+            Players[1].AddToMoveOptionQueue(CreateMoveOption("faujdar", -1));                           // adds faujdar move where backwards direction is downwards    
+            Players[1].AddToMoveOptionQueue(CreateMoveOption("cuirassier", -1));                        // adds curissier move where backwards direction is downwards
         }
     }
 
@@ -493,22 +493,22 @@ namespace Dastan
 
         public string GetSymbol()
         {
-            return Symbol;
+            return Symbol;                                                                              // returns the piece's symbol
         }
 
         public string GetTypeOfPiece()
         {
-            return TypeOfPiece;
+            return TypeOfPiece;                                                                         // returns the type of piece it is
         }
 
         public Player GetBelongsTo()
         {
-            return BelongsTo;
+            return BelongsTo;                                                                           // returns the person that the piece belongs to                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Ahmed Bad :)
         }
 
         public int GetPointsIfCaptured()
         {
-            return PointsIfCaptured;
+            return PointsIfCaptured;                                                                    // returns the points that are gained if that piece is captured
         }
     }
 
@@ -527,45 +527,45 @@ namespace Dastan
 
         public virtual void SetPiece(Piece P)
         {
-            PieceInSquare = P;                                                                          // sets the piece in the square as  P
+            PieceInSquare = P;                                                                          // sets the piece in the square as P
         }
 
         public virtual Piece RemovePiece()
         {
-            Piece PieceToReturn = PieceInSquare;
-            PieceInSquare = null;
-            return PieceToReturn;
+            Piece PieceToReturn = PieceInSquare;                                                        // setting the returned piece to the piece in the square
+            PieceInSquare = null;                                                                       // removing the piece in the square from the square
+            return PieceToReturn;                                                                       // returning the returned piece 
         }
 
         public virtual Piece GetPieceInSquare()
         {
-            return PieceInSquare;
+            return PieceInSquare;                                                                       // returns the piece in this square
         }
 
         public virtual string GetSymbol()
         {
-            return Symbol;
+            return Symbol;                                                                              // returns the squares symbol (" ", "K" or "k"
         }
 
         public virtual int GetPointsForOccupancy(Player CurrentPlayer)
         {
-            return 0;
+            return 0;                                                                                   // returning 0 as the points for occupying a normal square
         }
 
         public virtual Player GetBelongsTo()
         {
-            return BelongsTo;
+            return BelongsTo;                                                                           // return the player that the square belongs to 
         }
 
         public virtual bool ContainsKotla()
         {
-            if (Symbol == "K" || Symbol == "k")
+            if (Symbol == "K" || Symbol == "k")                
             {
-                return true;
+                return true;                                                                            // returns true if the square contains a kotla
             }
             else
             {
-                return false;
+                return false;                                                                           // returns false if the square does not contain a kotla
             }
         }
     }
@@ -582,28 +582,28 @@ namespace Dastan
         {
             if (PieceInSquare == null)
             {
-                return 0;
+                return 0;                                                                               // returning 0 if there is no piece in the kotla square
             }
             else if (BelongsTo.SameAs(CurrentPlayer))
             {
                 if (CurrentPlayer.SameAs(PieceInSquare.GetBelongsTo()) && (PieceInSquare.GetTypeOfPiece() == "piece" || PieceInSquare.GetTypeOfPiece() == "mirza"))
                 {
-                    return 5;
+                    return 5;                                                                           // returns 5 if the kotla belongs to the current player and the piece in the square also belongs to the current player
                 }
                 else
                 {
-                    return 0;
+                    return 0;                                                                           // returns 0 if the kotla belongs to the current player but the piece in the square does not belong to the current player
                 }
             }
             else
             {
                 if (CurrentPlayer.SameAs(PieceInSquare.GetBelongsTo()) && (PieceInSquare.GetTypeOfPiece() == "piece" || PieceInSquare.GetTypeOfPiece() == "mirza"))
                 {
-                    return 1;
+                    return 1;                                                                           // returns 1 if the kotla doesn't belong to the current player but is occupied by one of the current player pieces 
                 }
                 else
                 {
-                    return 0;
+                    return 0;                                                                           // returns 0 if the kotla belongs to the other player and is occupied by the other players piece
                 }
             }
         }
@@ -627,23 +627,23 @@ namespace Dastan
 
         public string GetName()
         {
-            return Name;
+            return Name;                                                                                // returns the name of the move option
         }
 
         public bool CheckIfThereIsAMoveToSquare(int StartSquareReference, int FinishSquareReference)
         {
-            int StartRow = StartSquareReference / 10;
-            int StartColumn = StartSquareReference % 10;
-            int FinishRow = FinishSquareReference / 10;
-            int FinishColumn = FinishSquareReference % 10;
-            foreach (var M in PossibleMoves)
+            int StartRow = StartSquareReference / 10;                                                   // getting the row number for the starting square from the tens column
+            int StartColumn = StartSquareReference % 10;                                                // getting the column number for the starting square from the units column
+            int FinishRow = FinishSquareReference / 10;                                                 // getting the row number for the finishing square from the tens column 
+            int FinishColumn = FinishSquareReference % 10;                                              // getting the column number for the finishing square from the units column
+            foreach (var M in PossibleMoves)                                                            // looping through the possible places that can be moved to
             {
                 if (StartRow + M.GetRowChange() == FinishRow && StartColumn + M.GetColumnChange() == FinishColumn)
                 {
-                    return true;
+                    return true;                                                                        // returns true if adding that move to the start position ends up at the finish position
                 }
             }
-            return false;
+            return false;                                                                               // returns false if none of the moves result in the finish position
         }
     }
 
@@ -659,80 +659,80 @@ namespace Dastan
 
         public int GetRowChange()
         {
-            return RowChange;
+            return RowChange;                                                                           // returns the change in rows for that move
         }
 
         public int GetColumnChange()
         {
-            return ColumnChange;
+            return ColumnChange;                                                                        // returns the change in columns for that move
         }
     }
 
     class MoveOptionQueue
     {
-        private List<MoveOption> Queue = new List<MoveOption>();
+        private List<MoveOption> Queue = new List<MoveOption>();                                        // queue list
 
         public string GetQueueAsString()
         {
-            string QueueAsString = "";
-            int Count = 1;
+            string QueueAsString = "";                                                                  // setting queue as string to "" by default
+            int Count = 1;                                                                              // setting count to 1
             foreach (var M in Queue)
             {
-                QueueAsString += Count.ToString() + ". " + M.GetName() + "   ";
-                Count += 1;
+                QueueAsString += Count.ToString() + ". " + M.GetName() + "   ";                         // creating the options int the move option queue
+                Count += 1;                                                                             // incrementing count
             }
-            return QueueAsString;
+            return QueueAsString;                                                                       // returning the queue as a string 
         }
 
         public void Add(MoveOption NewMoveOption)
         {
-            Queue.Add(NewMoveOption);
+            Queue.Add(NewMoveOption);                                                                   // adds the move option to the back of the queue
         }
 
         public void Replace(int Position, MoveOption NewMoveOption)
         {
-            Queue[Position] = NewMoveOption;
+            Queue[Position] = NewMoveOption;                                                            // sets the item at index Position in the queue is replaced with NewMoveOption
         }
 
         public void MoveItemToBack(int Position)
         {
-            MoveOption Temp = Queue[Position];
-            Queue.RemoveAt(Position);
-            Queue.Add(Temp);
+            MoveOption Temp = Queue[Position];                                                          // creates a tempoary move option based on move option selected
+            Queue.RemoveAt(Position);                                                                   // remoing the move option from the queue
+            Queue.Add(Temp);                                                                            // adding the move option to the back of the queue
         }
 
         public MoveOption GetMoveOptionInPosition(int Pos)
         {
-            return Queue[Pos];
+            return Queue[Pos];                                                                          // returns the move at the specified position in the queue 
         }
     }
 
     class Player
     {
-        private string Name;                                                                        // name of the player ("player one" or "player two") 
-        private int Direction, Score;                                                               // direction that the player should move - +1 results in downwards direction whereas -1 results in upwards direction
-        private MoveOptionQueue Queue = new MoveOptionQueue();                                      // players queue for the moves that they can have
+        private string Name;                                                                            // name of the player ("player one" or "player two") 
+        private int Direction, Score;                                                                   // direction that the player should move - +1 results in downwards direction whereas -1 results in upwards direction
+        private MoveOptionQueue Queue = new MoveOptionQueue();                                          // players queue for the moves that they can have
 
         public Player(string N, int D)
         {
-            Score = 100;                                                                            // setting the players starting score to 100                        
-            Name = N;                                                                               // setting the players name to what has been inputted
-            Direction = D;                                                                          // setting the players direction
+            Score = 100;                                                                                // setting the players starting score to 100                        
+            Name = N;                                                                                   // setting the players name to what has been inputted
+            Direction = D;                                                                              // setting the players direction
         }
 
         public bool SameAs(Player APlayer)
         {
-            if (APlayer == null)
+            if (APlayer == null)                                                                    
             {
-                return false;
+                return false;                                                                           // if there is no player inputted into the function then false is returned
             }
             else if (APlayer.GetName() == Name)
             {
-                return true;
+                return true;                                                                            // if the player inputted shares this player's name then true is returned
             }
             else
-            {
-                return false;
+            {   
+                return false;                                                                           // if the players names do not match then false is returned
             }
         }
 
@@ -743,22 +743,22 @@ namespace Dastan
 
         public void AddToMoveOptionQueue(MoveOption NewMoveOption)
         {
-            Queue.Add(NewMoveOption);                                                               // adds the move option inputted to the end of the queue
+            Queue.Add(NewMoveOption);                                                                   // adds the move option inputted to the end of the queue
         }
 
         public void UpdateQueueAfterMove(int Position)
         {
-            Queue.MoveItemToBack(Position - 1);
+            Queue.MoveItemToBack(Position - 1);                                                         // moves the item to the back of the queue                                                     
         }
 
         public void UpdateMoveOptionQueueWithOffer(int Position, MoveOption NewMoveOption)
         {
-            Queue.Replace(Position, NewMoveOption);
+            Queue.Replace(Position, NewMoveOption);                                                     // replaces the move option at currently at index Position in the player's queue with NewMoveOption
         }
 
         public int GetScore()
         {
-            return Score;
+            return Score;                                                                               // returns the players score
         }
 
         public string GetName()
@@ -768,18 +768,18 @@ namespace Dastan
 
         public int GetDirection()
         {
-            return Direction;
+            return Direction;                                                                           // returns the players direction
         }
 
         public void ChangeScore(int Amount)
         {
-            Score += Amount;
+            Score += Amount;                                                                            // increments the score by the amount specified
         }
 
         public bool CheckPlayerMove(int Pos, int StartSquareReference, int FinishSquareReference)
         {
-            MoveOption Temp = Queue.GetMoveOptionInPosition(Pos - 1);
-            return Temp.CheckIfThereIsAMoveToSquare(StartSquareReference, FinishSquareReference);
+            MoveOption Temp = Queue.GetMoveOptionInPosition(Pos - 1);                                   // tempoary move option created from what user submitted
+            return Temp.CheckIfThereIsAMoveToSquare(StartSquareReference, FinishSquareReference);       // returns true if one of the moves for the move option results in the piece moving from the start square to the finish square
         }
     }
 }
