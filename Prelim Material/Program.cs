@@ -281,7 +281,7 @@ namespace Dastan
                 GameOver = CheckIfGameOver();                                                           // check for if the game is over yet, loop ends if it is
             }
             DisplayState();                                                                             // displays the current game state information (I HATE THIS IT SHOULDN'T DO THIS! IT TELLS THE NEXT PLAYER TO GO BEFORE ENDING!?!?!??!)
-            DisplayFinalResult();                                                                       // 
+            DisplayFinalResult();                                                                       // displays the result of the game
         }
 
         private void UpdateBoard(int StartSquareReference, int FinishSquareReference)
